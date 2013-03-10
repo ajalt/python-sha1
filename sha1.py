@@ -1,9 +1,21 @@
+#!/usr/bin/env python
+
 import struct
 
 def _left_rotate(n, b):
     return ((n << b) | (n >> (32 - b))) & 0xffffffff
     
 def sha1(message):
+    """SHA-1 Hashing Function
+
+    A custom SHA-1 hashing function implemented entirely in Python.
+
+    Arguments:
+        message: The input message string to hash.
+
+    Returns:
+        A hex SHA-1 digest of the input message.
+    """
     # Initialize variables:
     h0 = 0x67452301
     h1 = 0xEFCDAB89
@@ -70,19 +82,4 @@ def sha1(message):
     return '%08x%08x%08x%08x%08x' % (h0, h1, h2, h3, h4)
     
 if __name__ == '__main__':
-    import hashlib
-    
-    for message in (
-                    '',
-                    'The quick brown fox jumps over the lazy dog',
-                    'The quick brown fox jumps over the lazy cog',
-                    'In cryptography, SHA-1 is a cryptographic hash function designed by the United States National Security Agency and published by the United States NIST as a U.S. Federal Information Processing Standard. SHA stands for "secure hash algorithm".'
-                    ):
-        expected = hashlib.sha1(message).hexdigest()
-        got = sha1(message)
-        print 'Message: ', repr(message)
-        print 'Expected:', expected
-        print 'Got:     ', got
-        print 'Correct: ', expected == got
-        print
-        
+    pass
