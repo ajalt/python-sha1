@@ -71,7 +71,7 @@ def sha1(message):
             a, b, c, d, e = ((_left_rotate(a, 5) + f + e + k + w[i]) & 0xffffffff, 
                             a, _left_rotate(b, 30), c, d)
     
-        # Add this chunk's hash to result so far:
+        # sAdd this chunk's hash to result so far:
         h0 = (h0 + a) & 0xffffffff
         h1 = (h1 + b) & 0xffffffff 
         h2 = (h2 + c) & 0xffffffff
@@ -82,4 +82,26 @@ def sha1(message):
     return '%08x%08x%08x%08x%08x' % (h0, h1, h2, h3, h4)
     
 if __name__ == '__main__':
-    pass
+    # Imports required for command line parsing. No need for these elsewhere
+    import argparse
+    import sys 
+    import os.path
+
+    # Parse the incoming arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('input', nargs='?',
+             help='input file or message to hash')
+    args = parser.parse_args()
+
+    data = None
+
+    if args.input is None:
+        # No argument given, assume message comes from standard input
+        data = sys.stdin.read()
+    elif os.path.isfile(args.input):
+        # An argument is given and it's a valid file. Read it
+        with open(args.input, 'rb') as f:
+            data = f.read()
+    
+    # Show the final digest
+    print 'sha1-digest:', sha1(data)
