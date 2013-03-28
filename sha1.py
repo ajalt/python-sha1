@@ -102,6 +102,8 @@ if __name__ == '__main__':
         # An argument is given and it's a valid file. Read it
         with open(args.input, 'rb') as f:
             data = f.read()
+    else:
+        data = args.input
     
     # Show the final digest
     print 'sha1-digest:', sha1(data)
