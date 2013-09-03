@@ -103,7 +103,7 @@ if __name__ == '__main__':
 
     if args.input is None:
         # No argument given, assume message comes from standard input
-        data = sys.stdin.read()
+        data = sys.stdin.read().encode()
     elif os.path.isfile(args.input):
         # An argument is given and it's a valid file. Read it
         with open(args.input, 'rb') as f:
