@@ -1,9 +1,15 @@
 #!/usr/bin/env python
 
+from __future__ import print_function, unicode_literals
 # Standard library imports
 import unittest
 import random
 import hashlib
+
+try:
+    range = xrange
+except NameError:
+    pass
 
 # Custom SHA-1 library
 import sha1
@@ -22,7 +28,7 @@ class TestSha1(unittest.TestCase):
         Raises:
             AssertionError if test fails.
         """
-        print '\n>>> running: test_similar'
+        print('\n>>> running: test_similar')
         first_msg = bytearray(get_random_bytes())
         modified_msg = bytearray()
 
@@ -33,13 +39,13 @@ class TestSha1(unittest.TestCase):
             augmentor = 1 if i == byte_to_modify else 0
             modified_msg.append(byte + augmentor)
 
-        first_digest = sha1.sha1(str(first_msg))
-        modified_digest = sha1.sha1(str(modified_msg))
+        first_digest = sha1.sha1(bytes(first_msg))
+        modified_digest = sha1.sha1(bytes(modified_msg))
 
-        print '... test_similar: checking digest differences'
+        print('... test_similar: checking digest differences')
         self.assertNotEqual(first_digest, modified_digest)
 
-        print '... test_similar: success'
+        print('... test_similar: success')
 
     def test_repeatable(self):
         """Test SHA-1 Repeatability
@@ -50,16 +56,16 @@ class TestSha1(unittest.TestCase):
         Raises:
             AssertionError if test fails.
         """
-        print '\n>>> running: test_repeatable'
+        print('\n>>> running: test_repeatable')
         msg = bytearray(get_random_bytes())
 
-        first_digest = sha1.sha1(str(msg))
-        second_digest = sha1.sha1(str(msg))
+        first_digest = sha1.sha1(bytes(msg))
+        second_digest = sha1.sha1(bytes(msg))
 
-        print '... test_repeatable: checking for identical digests'
+        print('... test_repeatable: checking for identical digests')
         self.assertEqual(first_digest, second_digest)
 
-        print '... test_repeatable: success'
+        print('... test_repeatable: success')
 
     def test_comparison(self):
         """Test SHA-1 Library Accuracy
@@ -70,16 +76,16 @@ class TestSha1(unittest.TestCase):
         Raises:
             AssertionError if test fails.
         """
-        print '\n>>> running: test_comparison'
+        print('\n>>> running: test_comparison')
         msg = bytearray(get_random_bytes())
 
-        custom_sha1_digest = sha1.sha1(str(msg))
-        stdlib_sha1_digest = hashlib.sha1(str(msg)).hexdigest()
+        custom_sha1_digest = sha1.sha1(bytes(msg))
+        stdlib_sha1_digest = hashlib.sha1(bytes(msg)).hexdigest()
 
-        print '... test_comparison: checking for identical digests'
+        print('... test_comparison: checking for identical digests')
         self.assertEqual(custom_sha1_digest, stdlib_sha1_digest)
 
-        print '... test_comparison: success'
+        print('... test_comparison: success')
 
 def get_random_bytes():
     """Get Random Bits
@@ -92,7 +98,7 @@ def get_random_bytes():
     """
     size = random.randrange(1, 1000)
 
-    for _ in xrange(size):
+    for _ in range(size):
         yield random.getrandbits(8)
 
 if __name__ == '__main__':
