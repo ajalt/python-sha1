@@ -103,7 +103,15 @@ if __name__ == '__main__':
 
     if args.input is None:
         # No argument given, assume message comes from standard input
-        data = sys.stdin.read().encode()
+        try:
+            # sys.stdin is opened in text mode, which can change line endings,
+            # leading to incorrect results. Detach fixes this issue, but it's
+            # new in Python 3.1
+            data = sys.stdin.detach().read()
+        except AttributeError:
+            print('WARNING: if the environent variable PYTHONUNBUFFERED is not set, '
+                    'the hash may be incorrect.')
+            data = sys.stdin.read().encode()
     elif os.path.isfile(args.input):
         # An argument is given and it's a valid file. Read it
         with open(args.input, 'rb') as f:
