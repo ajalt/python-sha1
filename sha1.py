@@ -91,7 +91,7 @@ if __name__ == '__main__':
     # Imports required for command line parsing. No need for these elsewhere
     import argparse
     import sys 
-    import os.path
+    import os
 
     # Parse the incoming arguments
     parser = argparse.ArgumentParser()
@@ -109,8 +109,11 @@ if __name__ == '__main__':
             # new in Python 3.1
             data = sys.stdin.detach().read()
         except AttributeError:
-            print('WARNING: if the environent variable PYTHONUNBUFFERED is not set, '
-                    'the hash may be incorrect.')
+            # Linux ans OSX both use \n line endings, so only windows is a
+            # problem.
+            if sys.platform == "win32": 
+                import msvcrt
+                msvcrt.setmode(sys.stdin.fileno(), os.O_BINARY) 
             data = sys.stdin.read().encode()
     elif os.path.isfile(args.input):
         # An argument is given and it's a valid file. Read it
