@@ -24,9 +24,6 @@ class TestSha1(unittest.TestCase):
 
         Tests sets of messages with 1 bit of difference. Ensures that all
         messages produce unique hashes.
-
-        Raises:
-            AssertionError if test fails.
         """
         print('\n>>> running: test_similar')
         first_msg = bytearray(get_random_bytes())
@@ -52,9 +49,6 @@ class TestSha1(unittest.TestCase):
 
         Runs the SHA-1 hashing function multiple times to ensure the same
         outcome for any identical message input.
-        
-        Raises:
-            AssertionError if test fails.
         """
         print('\n>>> running: test_repeatable')
         msg = bytearray(get_random_bytes())
@@ -72,9 +66,6 @@ class TestSha1(unittest.TestCase):
 
         Runs the custom SHA-1 hashing function implementation with other
         SHA-1 functions contained in the Python hashlib library.
-
-        Raises:
-            AssertionError if test fails.
         """
         print('\n>>> running: test_comparison')
         msg = bytearray(get_random_bytes())
@@ -86,6 +77,30 @@ class TestSha1(unittest.TestCase):
         self.assertEqual(custom_sha1_digest, stdlib_sha1_digest)
 
         print('... test_comparison: success')
+
+    def test_associativity(self):
+        """Test SHA-1 associativity
+
+        Tests the fact that sha1(ab) is equivalent to sha1(a) updated with b.
+        """
+        print('\n>>> running: test_associativity')
+        msg1 = bytearray(get_random_bytes())
+        msg2 = bytearray(get_random_bytes())
+
+        first_digest = sha1.sha1(bytes(msg1) + bytes(msg2))
+
+        sha = sha1.Sha1Hash()
+        sha.update(msg1)
+        sha.update(msg2)
+
+        second_digest = sha.hexdigest()
+
+        print('... test_associativity: checking for identical digests')
+        self.assertEqual(first_digest, second_digest)
+
+        print('... test_associativity: success')
+
+
 
 def get_random_bytes():
     """Get Random Bits
